@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -44,9 +42,9 @@ public class PlayerInput : MonoBehaviour
 
     IEnumerator ButtonReset()
     {
-        yield return new WaitForSeconds(0.25f); //Wait the amount of seconds before continuing
-
-        ButtonFunction(buttonHold, buttonPress);
+        yield return new WaitForSeconds(0.2f); //Wait the amount of seconds before continuing
+        
+        StartCoroutine(ButtonFunction(buttonHold, buttonPress));
 
         buttonPress = 0;
         buttonHold = 0;
@@ -54,7 +52,7 @@ public class PlayerInput : MonoBehaviour
 
     IEnumerator ButtonFunction(float buttonHeld, int buttonTapped)
     {
-        if (buttonHeld < 0.45f) //If the button was held for less than the amount of time, then it was tapped
+        if (buttonHeld < 0.3f) //If the button was held for less than the amount of time, then it was tapped
         {
             if (buttonTapped == 1) //If the button was tapped once, it's a single click
             {

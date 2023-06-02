@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class GameFlow : MonoBehaviour
 {
@@ -11,6 +9,12 @@ public class GameFlow : MonoBehaviour
     string[] Elements = new string[] { "Water", "Fire", "Earth", "Wind"}; //Water (douses) > Fire (burns) > Earth (blocks) > Wind (blows)
     public string elementDiscovered;
     int cycledElement;
+
+    bool discoveredAnElement;
+
+    bool stopSearch;
+
+    public string hand;
     
     // Start is called before the first frame update
     void Start()
@@ -25,12 +29,21 @@ public class GameFlow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        CollectElement();
     }
 
-    IEnumerator SearchingForElements()
+    void DetectChangedInput()
+    {
+        if (playerInput.buttonInput != PlayerInput.ButtonInput.NoInput) //If the buttonInput is something other than No Input, then an input has been detected
+        {
+            
+        }
+    }
+
+    IEnumerator SearchingForElements() //Step 1 of game flow
     {
         elementDiscovered = "Searching...";
+        discoveredAnElement = false;
         
         yield return new WaitForSeconds(1f); //Searching Phase (for 1 second)
 
@@ -46,8 +59,37 @@ public class GameFlow : MonoBehaviour
         elementDiscovered = Elements[cycledElement];
         Debug.Log(elementDiscovered);
 
+        discoveredAnElement = true;
+
         yield return new WaitForSeconds(1f); //Discovery Phase (for 1 second)
 
-        StartCoroutine(SearchingForElements()); //Loop this coroutine
+        if (stopSearch) //If CollectElement() sets stopSearch to true
+        {
+            stopSearch = false; //Don't loop and reset stopSearch
+        }
+        else //Otherwise, if stopSearch is false
+        {
+            StartCoroutine(SearchingForElements()); //Loop this coroutine
+        }
+    }
+
+    void CollectElement() //Step 2 of game flow
+    {
+        if (discoveredAnElement) //If the player discovered an element during the Searching phase
+        {
+            if (playerInput.buttonInput == PlayerInput.ButtonInput.SingleClick) //If the player clicked once
+            {
+                hand = elementDiscovered;
+
+                stopSearch = true; //This bool prevents the SearchingForElements coroutine from looping (since it wouldn't stop on StopCoroutine())
+                discoveredAnElement = false;
+                elementDiscovered = "";
+            }
+        }
+    }
+
+    void UseElement() //Step 3 of game flow
+    {
+
     }
 }
