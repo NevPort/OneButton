@@ -6,12 +6,20 @@ using TMPro;
 
 public class GameFlow : MonoBehaviour
 {
+    PlayerInput playerInput;
     
+    string[] Elements = new string[] { "Water", "Fire", "Earth", "Wind"}; //Water (douses) > Fire (burns) > Earth (blocks) > Wind (blows)
+    public string elementDiscovered;
+    int cycledElement;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerInput = FindFirstObjectByType<PlayerInput>(); //Reference to PlayerInput script
+
+        cycledElement = 3; //cycledElement value starts at 3 so that it can cycle back to the first value in the Elements array at the beginning of the game
+
+        StartCoroutine(SearchingForElements());
     }
 
     // Update is called once per frame
@@ -20,77 +28,26 @@ public class GameFlow : MonoBehaviour
         
     }
 
-    /*
-    int buttonPress;
-    float buttonHold;
-    TMP_Text pressTypeIndicator;
-    Image pressIndicator;
-
-    // Start is called before the first frame update
-    void Start()
+    IEnumerator SearchingForElements()
     {
-        pressTypeIndicator = GameObject.Find("Press Input Type Text").GetComponent<TMP_Text>();
-        pressIndicator = GameObject.Find("Press Indicator").GetComponent<Image>();
-    }
+        elementDiscovered = "Searching...";
+        
+        yield return new WaitForSeconds(1f); //Searching Phase (for 1 second)
 
-    // Update is called once per frame
-    void Update()
-    {
-        ButtonInput();
-    }
-
-    void ButtonInput()
-    {
-        if (Input.GetKey(KeyCode.Space)) //True for as long as Space is held
+        if ((cycledElement + 1) >= Elements.Length) //If the cycledElement value + 1 would go over the length of the Elements array
         {
-            buttonHold += Time.deltaTime; //Increase buttonHold float w/ time
+            cycledElement = 0; //Cycle it back to 0
+        }
+        else if ((cycledElement + 1) < Elements.Length) //Otherwise, if the cycledElement value + 1 would be less than the length
+        {
+            cycledElement++; //Add 1 to the cycledElement value
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) //True for the first frame Space is pressed
-        {
-            buttonPress++; //Raise buttonPress by one
-            pressIndicator.color = Color.green;
-        }
+        elementDiscovered = Elements[cycledElement];
+        Debug.Log(elementDiscovered);
 
-        if (Input.GetKeyUp(KeyCode.Space)) //True for the first frame Space is released
-        {
-            StartCoroutine(ButtonReset()); //Start ButtonTapReset coroutine
+        yield return new WaitForSeconds(1f); //Discovery Phase (for 1 second)
 
-            pressIndicator.color = Color.white;
-        }
+        StartCoroutine(SearchingForElements()); //Loop this coroutine
     }
-
-    IEnumerator ButtonReset()
-    {
-        yield return new WaitForSeconds(0.25f); //Wait the amount of seconds before continuing
-
-        ButtonFunction(buttonHold, buttonPress);
-
-        buttonPress = 0;
-        buttonHold = 0;
-    }
-
-    void ButtonFunction(float buttonHeld, int buttonTapped)
-    {
-        if (buttonHeld < 0.45f) //If the button was held for less than the amount of time, then it was tapped
-        {
-            if (buttonTapped == 1) //If the button was tapped once, it's a single click; twice, double click; etc.
-            {
-                pressTypeIndicator.text = "Single Click";
-            }
-            else if (buttonTapped == 2)
-            {
-                pressTypeIndicator.text = "Double Click";
-            }
-            else if (buttonTapped == 3)
-            {
-                pressTypeIndicator.text = "Triple Click";
-            }
-        }
-        else
-        {
-            pressTypeIndicator.text = "Held for " + buttonHeld.ToString();
-        }
-    }
-    */
 }
