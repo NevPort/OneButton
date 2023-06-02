@@ -30,6 +30,7 @@ public class GameFlow : MonoBehaviour
     void Update()
     {
         CollectElement();
+        UseElement();
     }
 
     void DetectChangedInput()
@@ -90,6 +91,14 @@ public class GameFlow : MonoBehaviour
 
     void UseElement() //Step 3 of game flow
     {
+        if (hand != "") //If the player's hand isn't empty
+        {
+            if (playerInput.buttonInput == PlayerInput.ButtonInput.DoubleClick) //If the player clicks twice
+            {
+                hand = ""; //Consume the item
 
+                StartCoroutine(SearchingForElements());
+            }
+        }
     }
 }
