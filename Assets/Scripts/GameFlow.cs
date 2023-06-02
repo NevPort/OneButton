@@ -95,10 +95,36 @@ public class GameFlow : MonoBehaviour
         {
             if (playerInput.buttonInput == PlayerInput.ButtonInput.DoubleClick) //If the player clicks twice
             {
+                CheckElementMatching();
+                
+                if (CheckElementMatching())
+                {
+                    FindObjectOfType<Spawner>().KillMonster();
+                }
+                
                 hand = ""; //Consume the item
 
                 StartCoroutine(SearchingForElements());
             }
         }
+    }
+
+    bool CheckElementMatching()
+    {
+        Debug.Log("Check element matching");
+        
+        MonsterBehavior firstMonster = FindObjectOfType<Spawner>().monstersInGame[0].GetComponent<MonsterBehavior>(); //Get reference to the code of the first monster
+
+        //If the element the player has is able to overcome the element of the monster, then it's able to kill it. Otherwise, it can't
+        if (hand == "Water" && firstMonster.elementType.ToString() == "Fire")
+            return true;
+        else if (hand == "Fire" && firstMonster.elementType.ToString() == "Earth")
+            return true;
+        else if (hand == "Earth" && firstMonster.elementType.ToString() == "Wind")
+            return true;
+        else if (hand == "Wind" && firstMonster.elementType.ToString() == "Water")
+            return true;
+        else
+            return false;
     }
 }
