@@ -6,6 +6,7 @@ public class GameFlow : MonoBehaviour
     string[] Elements = new string[] { "Water", "Fire", "Earth", "Wind" }; //Water (douses) > Fire (burns) > Earth (blocks) > Wind (blows)
     public string elementDiscovered;
     int cycledElement;
+    float cycleRate;
 
     bool discoveredAnElement;
 
@@ -18,7 +19,7 @@ public class GameFlow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        cycleRate = 1.1f; 
     }
 
     public void GameHasStarted()
@@ -55,7 +56,7 @@ public class GameFlow : MonoBehaviour
         elementDiscovered = "Searching...";
         discoveredAnElement = false;
 
-        yield return new WaitForSeconds(1f); //Searching Phase
+        yield return new WaitForSeconds(cycleRate); //Searching Phase
 
         if ((cycledElement + 1) >= Elements.Length) //If the cycledElement value + 1 would go over the length of the Elements array
         {
@@ -67,11 +68,10 @@ public class GameFlow : MonoBehaviour
         }
 
         elementDiscovered = Elements[cycledElement];
-        Debug.Log(elementDiscovered);
 
         discoveredAnElement = true;
 
-        yield return new WaitForSeconds(1f); //Discovery Phase
+        yield return new WaitForSeconds(cycleRate); //Discovery Phase
 
         yield return new WaitWhile(() => stopSearch); //Coroutine pauses until stopSearch is no longer true
 

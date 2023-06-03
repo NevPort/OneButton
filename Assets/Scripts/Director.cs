@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Director : MonoBehaviour
 {
@@ -9,9 +10,15 @@ public class Director : MonoBehaviour
     public enum GameState { MainMenu, Tutorial, Pregame, InProgress, Endgame}
     public GameState gameState;
 
+    public GameObject[] TutorialArray;
+
     public int playerLives;
 
     int tutorialPhase;
+
+    public string timeSurvived;
+    float secondsTimer;
+    int minutesTimer;
 
     Spawner spawner;
     GameFlow gameFlow;
@@ -41,6 +48,22 @@ public class Director : MonoBehaviour
     void Update()
     {
         MenuNavigation();
+
+        if (gameState == GameState.InProgress) //If the game is in progress, start timer
+        {
+            secondsTimer += Time.deltaTime;
+
+            if (secondsTimer >= 60)
+            {
+                minutesTimer++;
+                secondsTimer = 0;
+            }
+
+            if (secondsTimer < 10)
+                timeSurvived = minutesTimer + ":0" + (int)secondsTimer;
+            else
+                timeSurvived = minutesTimer + ":" + (int)secondsTimer;
+        }
     }
 
     void MenuNavigation()
@@ -60,21 +83,20 @@ public class Director : MonoBehaviour
         }
         else if (gameState == GameState.Tutorial) //Otherwise, if the game is in the tutorial
         {
-            //Bring up tutorial parent
+            TutorialArray[0].gameObject.transform.parent.gameObject.SetActive(true); //Turn on the Tutorial parent gameobject
 
             if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.SingleClick)
             {
-                /* 
-                if ((tutorialPhase += 1) >= TutorialArray.Length - 1)
+                if ((tutorialPhase += 1) >= TutorialArray.Length - 1) //If there's no more of the tutorial to continue with
                 {
                     TutorialArray[tutorialPhase].SetActive(false); //Turn off final tutorial phase
                     
                     tutorialPhase = 0; //Reset tutorial phase (in case player needs to read it again)
                     
-                    TutorialArray[tutorialPhase].SetActive(true); //Turn back on first tutorial phase (to prepare for tutorial reread)
-                    
-                    //Turn off tutorial parent
-                    
+                    TutorialArray[tutorialPhase].SetActive(true); //Turn on first tutorial phase again
+
+                    TutorialArray[0].gameObject.transform.parent.gameObject.SetActive(false); //Turn off the Tutorial parent gameobject
+
                     gameState = GameState.MainMenu; //Switch to MainMenu state
                 }
                 else
@@ -85,13 +107,29 @@ public class Director : MonoBehaviour
                     
                     TutorialArray[tutorialPhase].SetActive(true); //Turn on new tutorial phase
                 }
-                 
-                 */
             }
         }
         else if (gameState == GameState.Endgame) //Otherwise, if the game is in the end game menu
         {
+            //Take out in-game HUD
+
             //Bring up end game menu
+
+            if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.SingleClick)
+            {
+                //Take out end game menu
+
+                //Replenish lives and timer
+                playerLives = 3;
+                secondsTimer = 0f;
+                minutesTimer = 0;
+                
+                StartCoroutine(StartGame()); //Start game once again
+            }
+            else if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.DoubleClick)
+            {
+                SceneManager.LoadScene("MainScene", LoadSceneMode.Single); //Reload game (since restarting to main menu)
+            }
         }
     }
 
@@ -103,8 +141,11 @@ public class Director : MonoBehaviour
 
         gameState = GameState.InProgress; //After intro, switch to InProgress state
 
-        //Start necessary coroutines
-        StartCoroutine(gameFlow.SearchingForElements());
+        //Bring up in-game HUD
+
+        //Start necessary methods and coroutines
+        gameFlow.GameHasStarted();
+        StartCoroutine(spawner.Progression());
         StartCoroutine(spawner.SpawnMonsters());
     }
 

@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     TMP_Text leftHandText;
     TMP_Text rightHandText;
     TMP_Text livesText;
+    TMP_Text timeSurvivedText;
     
     // Start is called before the first frame update
     void Start()
@@ -18,19 +19,38 @@ public class UIManager : MonoBehaviour
         leftHandText = GameObject.Find("Left Hand Text").GetComponent<TMP_Text>();
         rightHandText = GameObject.Find("Right Hand Text").GetComponent<TMP_Text>();
         livesText = GameObject.Find("Lives Text").GetComponent<TMP_Text>();
+        timeSurvivedText = GameObject.Find("Time Survived").GetComponent<TMP_Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateTexts();
+        if (Director.Instance.gameState == Director.GameState.InProgress)
+        {
+            UpdateTexts();
+        }
     }
 
     void UpdateTexts()
     {
-        discoveringText.text = FindFirstObjectByType<GameFlow>().elementDiscovered;
-        leftHandText.text = FindFirstObjectByType<GameFlow>().lefthand;
-        rightHandText.text = FindFirstObjectByType<GameFlow>().righthand;
         livesText.text = "Lives: " + Director.Instance.playerLives.ToString();
+        timeSurvivedText.text = "Survived for: " + Director.Instance.timeSurvived;
+
+        if (FindFirstObjectByType<GameFlow>().elementDiscovered != "Searching...") //If the GameFlow isn't searching for an element
+            discoveringText.text = "Found: " + FindFirstObjectByType<GameFlow>().elementDiscovered + "\n*Click Once*";
+        else if (FindFirstObjectByType<GameFlow>().elementDiscovered == "Searching...")
+            discoveringText.text = FindFirstObjectByType<GameFlow>().elementDiscovered;
+        else if (FindFirstObjectByType<GameFlow>().elementDiscovered == "")
+            discoveringText.text = FindFirstObjectByType<GameFlow>().elementDiscovered;
+
+        if (FindFirstObjectByType<GameFlow>().lefthand != "") //If the left hand isn't empty
+            leftHandText.text = FindFirstObjectByType<GameFlow>().lefthand + "\n*Double-Click*";
+        else
+            leftHandText.text = FindFirstObjectByType<GameFlow>().lefthand;
+
+        if (FindFirstObjectByType<GameFlow>().righthand != "") //If the right hand isn't empty
+            rightHandText.text = FindFirstObjectByType<GameFlow>().righthand + "\n*Triple-Click*";
+        else
+            rightHandText.text = FindFirstObjectByType<GameFlow>().righthand;
     }
 }
