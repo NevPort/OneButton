@@ -4,11 +4,25 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    public enum ButtonInput { NoInput, Hold, SingleClick, DoubleClick}
+    public static PlayerInput Instance { get; private set; }
+
+    public enum ButtonInput { NoInput, Hold, SingleClick, DoubleClick, TripleClick}
     public ButtonInput buttonInput;
     
     int buttonPress;
     public float buttonHold;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +56,7 @@ public class PlayerInput : MonoBehaviour
 
     IEnumerator ButtonReset()
     {
-        yield return new WaitForSeconds(0.2f); //Wait the amount of seconds before continuing
+        yield return new WaitForSeconds(0.3f); //Wait the amount of seconds before continuing
         
         StartCoroutine(ButtonFunction(buttonHold, buttonPress));
 
@@ -52,15 +66,19 @@ public class PlayerInput : MonoBehaviour
 
     IEnumerator ButtonFunction(float buttonHeld, int buttonTapped)
     {
-        if (buttonHeld < 0.3f) //If the button was held for less than the amount of time, then it was tapped
+        if (buttonHeld < 0.35f) //If the button was held for less than the amount of time, then it was tapped
         {
             if (buttonTapped == 1) //If the button was tapped once, it's a single click
             {
                 buttonInput = ButtonInput.SingleClick;
             }
-            else if (buttonTapped >= 2) //If the button was tapped twice, it's a double click
+            else if (buttonTapped == 2) //If the button was tapped twice, it's a double click
             {
                 buttonInput = ButtonInput.DoubleClick;
+            }
+            else if (buttonTapped == 3) //If the button was tapped trice, it's a triple click
+            {
+                buttonInput = ButtonInput.TripleClick;
             }
         }
         else //Otherwise, the button was held
