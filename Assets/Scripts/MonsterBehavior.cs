@@ -25,6 +25,21 @@ public class MonsterBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        tf.position = Vector3.MoveTowards(tf.position, target, speed * Time.deltaTime); //This monster will move towards the player with speedMove();
+        if (Director.Instance.gameState == Director.GameState.InProgress) //If the game is currently in progress, this monster will move towards the player, otherwise, it stands still (likely for endgame)
+        {
+            tf.position = Vector3.MoveTowards(tf.position, target, speed * Time.deltaTime);
+        }
+        else
+        {
+            tf.position = tf.position;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision) //If the monster touches the player, tell the Director
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            Director.Instance.PlayerTookDamage();
+        }
     }
 }

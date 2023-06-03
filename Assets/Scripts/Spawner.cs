@@ -39,9 +39,24 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public void KillMonster()
+    public void KillMonster(bool allMonsters) //Function takes care of killing monsters, if false then only front monster, if true then all monsters
     {
-        Destroy(monstersInGame[0]);
-        monstersInGame.RemoveAt(0);
+        if (allMonsters)
+        {
+            for (int x = 0; x < monstersInGame.Count; x++)
+            {
+                Destroy(monstersInGame[x]);
+
+                if (x >= monstersInGame.Count - 1)
+                {
+                    monstersInGame.Clear();
+                }
+            }
+        }
+        else
+        {
+            Destroy(monstersInGame[0]);
+            monstersInGame.RemoveAt(0);
+        }
     }
 }
