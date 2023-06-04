@@ -345,8 +345,8 @@ MonoBehaviour:
   gameState: 0
   TutorialArray: []
   MusicClipsArray:
-  - {fileID: 8300000, guid: 39cc5b8a1364b0b4da06396c5db2c5b1, type: 3}
-  - {fileID: 8300000, guid: f43c19fdf0dab164db2a5f9444873e6e, type: 3}
+  - {fileID: 8300000, guid: ea3a78c259fb7af4ea5d4751c1b4e61e, type: 3}
+  - {fileID: 8300000, guid: 72f7a684280b2964aa6c62e089ce8fae, type: 3}
   SfxClipsArray:
   - {fileID: 8300000, guid: 70d1ff0d2a371484dbef7f3b780af881, type: 3}
   - {fileID: 8300000, guid: dafc4767f240c5b44b49886e422ee251, type: 3}
