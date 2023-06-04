@@ -19,9 +19,8 @@ public class UIManager : MonoBehaviour
     Image rightHandImage;
 
     GameFlow gameFlow;
-    
-    // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
         gameFlow = FindFirstObjectByType<GameFlow>();
 
@@ -36,6 +35,12 @@ public class UIManager : MonoBehaviour
         rightHandImage = GameObject.Find("Right Hand").GetComponent<Image>();
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -48,8 +53,8 @@ public class UIManager : MonoBehaviour
 
     void UpdateTexts()
     {
-        livesText.text = "Lives: " + Director.Instance.playerLives.ToString();
-        timeSurvivedText.text = "Survived for: " + Director.Instance.timeSurvived;
+        livesText.text = "Lives:\n" + Director.Instance.playerLives.ToString();
+        timeSurvivedText.text = "Survived for:\n" + Director.Instance.timeSurvived;
 
         if (gameFlow.elementDiscovered == "")
             discoveringText.text = "";
@@ -73,83 +78,38 @@ public class UIManager : MonoBehaviour
     {
         //Element Discovered Image
         if (gameFlow.elementDiscovered == "Water")
-        {
-            discoveredImage.color = new Color(255, 255, 255, 255);
             discoveredImage.sprite = elementalSymbols[0];
-        }
         else if (gameFlow.elementDiscovered == "Fire")
-        {
-            discoveredImage.color = new Color(255, 255, 255, 255);
             discoveredImage.sprite = elementalSymbols[1];
-        }
         else if (gameFlow.elementDiscovered == "Earth")
-        {
-            discoveredImage.color = new Color(255, 255, 255, 255);
             discoveredImage.sprite = elementalSymbols[2];
-        }
         else if (gameFlow.elementDiscovered == "Wind")
-        {
-            discoveredImage.color = new Color(255, 255, 255, 255);
             discoveredImage.sprite = elementalSymbols[3];
-        }
         else
-        {
-            discoveredImage.color = new Color(0, 0, 0, 0);
-            discoveredImage.sprite = null;
-        }
+            discoveredImage.sprite = elementalSymbols[4];
 
         //Left Hand Image
         if (gameFlow.lefthand == "Water")
-        {
-            leftHandImage.color = new Color(255, 255, 255, 255);
             leftHandImage.sprite = elementalSymbols[0];
-        }
         else if (gameFlow.lefthand == "Fire")
-        {
-            leftHandImage.color = new Color(255, 255, 255, 255);
             leftHandImage.sprite = elementalSymbols[1];
-        }
         else if (gameFlow.lefthand == "Earth")
-        {
-            leftHandImage.color = new Color(255, 255, 255, 255);
             leftHandImage.sprite = elementalSymbols[2];
-        }
         else if (gameFlow.lefthand == "Wind")
-        {
-            leftHandImage.color = new Color(255, 255, 255, 255);
             leftHandImage.sprite = elementalSymbols[3];
-        }
         else
-        {
-            leftHandImage.color = new Color(255, 255, 255, 120);
-            leftHandImage.sprite = null;
-        }
+            leftHandImage.sprite = elementalSymbols[5];
 
         //Right Hand Image
         if (gameFlow.righthand == "Water")
-        {
-            rightHandImage.color = new Color(255, 255, 255, 255);
             rightHandImage.sprite = elementalSymbols[0];
-        }
         else if (gameFlow.righthand == "Fire")
-        {
-            rightHandImage.color = new Color(255, 255, 255, 255);
             rightHandImage.sprite = elementalSymbols[1];
-        }
         else if (gameFlow.righthand == "Earth")
-        {
-            rightHandImage.color = new Color(255, 255, 255, 255);
             rightHandImage.sprite = elementalSymbols[2];
-        }
         else if (gameFlow.righthand == "Wind")
-        {
-            rightHandImage.color = new Color(255, 255, 255, 255);
             rightHandImage.sprite = elementalSymbols[3];
-        }
         else
-        {
-            rightHandImage.color = new Color(255, 255, 255, 120);
-            rightHandImage.sprite = null;
-        }
+            rightHandImage.sprite = elementalSymbols[6];
     }
 }

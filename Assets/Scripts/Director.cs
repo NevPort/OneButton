@@ -10,7 +10,7 @@ public class Director : MonoBehaviour
     public enum GameState { MainMenu, Tutorial, Pregame, InProgress, Endgame}
     public GameState gameState;
 
-    public GameObject[] TutorialArray;
+    public GameObject[] IntroArray;
 
     public AudioClip[] MusicClipsArray;
 
@@ -21,11 +21,15 @@ public class Director : MonoBehaviour
 
     public int playerLives;
 
-    int tutorialPhase;
-
     public string timeSurvived;
     float secondsTimer;
     int minutesTimer;
+
+    bool restarting;
+
+    GameObject MainMenu;
+    GameObject HUD;
+    GameObject GameOver;
 
     Spawner spawner;
     GameFlow gameFlow;
@@ -50,6 +54,17 @@ public class Director : MonoBehaviour
     {
         spawner = FindObjectOfType<Spawner>();
         gameFlow = FindObjectOfType<GameFlow>();
+        MainMenu = GameObject.Find("Main Menu");
+        HUD = GameObject.Find("In-Game HUD");
+        GameOver = GameObject.Find("Game Over");
+
+        MainMenu.SetActive(true);
+        HUD.SetActive(false);
+        GameOver.SetActive(false);
+
+        IntroArray[0].SetActive(true);
+        IntroArray[1].SetActive(false);
+        IntroArray[2].SetActive(false);
         
         gameState = GameState.MainMenu; //Start GameState on MainMenu state
     }
@@ -91,60 +106,33 @@ public class Director : MonoBehaviour
     void MenuNavigation()
     {
         if (gameState == GameState.MainMenu) //If the game is in the main menu
-        {          
+        {
+            MainMenu.SetActive(true); //Bring up Main Menu
+            
             if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.SingleClick) //If the player single clicks
             {
                 StartCoroutine(StartGame()); //Start the game
+
                 PlayerInput.Instance.buttonInput = PlayerInput.ButtonInput.NoInput; //Quickly set to No Input
-            }
-            else if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.DoubleClick) //Otherwise, if the player double clicks
-            {
-                gameState = GameState.Tutorial; //Switch to Tutorial state
-                PlayerInput.Instance.buttonInput = PlayerInput.ButtonInput.NoInput; //Quickly set to No Input
-            }
-        }
-        else if (gameState == GameState.Tutorial) //Otherwise, if the game is in the tutorial
-        {
-            TutorialArray[0].gameObject.transform.parent.gameObject.SetActive(true); //Turn on the Tutorial parent gameobject
-
-            if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.SingleClick)
-            {
-                if ((tutorialPhase += 1) >= TutorialArray.Length - 1) //If there's no more of the tutorial to continue with
-                {
-                    TutorialArray[tutorialPhase].SetActive(false); //Turn off final tutorial phase
-                    
-                    tutorialPhase = 0; //Reset tutorial phase (in case player needs to read it again)
-                    
-                    TutorialArray[tutorialPhase].SetActive(true); //Turn on first tutorial phase again
-
-                    TutorialArray[0].gameObject.transform.parent.gameObject.SetActive(false); //Turn off the Tutorial parent gameobject
-
-                    gameState = GameState.MainMenu; //Switch to MainMenu state
-                }
-                else
-                {
-                    TutorialArray[tutorialPhase].SetActive(false); //Turn off current tutorial phase
-                    
-                    tutorialPhase++; //Move to next phase
-                    
-                    TutorialArray[tutorialPhase].SetActive(true); //Turn on new tutorial phase
-                }
             }
         }
         else if (gameState == GameState.Endgame) //Otherwise, if the game is in the end game menu
         {
-            //Take out in-game HUD
-
-            //Bring up end game menu
+            GameOver.SetActive(true);
+            HUD.SetActive(false);
 
             if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.SingleClick)
             {
-                //Take out end game menu
+                GameOver.SetActive(false);
+
+                SoundEffect(0, 1, false);
 
                 //Replenish lives and timer
                 playerLives = 3;
                 secondsTimer = 0f;
                 minutesTimer = 0;
+
+                restarting = true;
                 
                 StartCoroutine(StartGame()); //Start game once again
             }
@@ -157,16 +145,31 @@ public class Director : MonoBehaviour
 
     public IEnumerator StartGame() //For when the game starts from main menu
     {
-        gameState = GameState.Pregame; //Switch to Pregame state
+        if (restarting == false) //If not restarting, play intro sequence
+        {
+            gameState = GameState.Pregame; //Switch to Pregame state
 
-        yield return new WaitForSeconds(3f); //Delay for starting animations
+            MusicSource.Stop(); //Stop music
+            SoundEffect(11, 0.5f, false); //Explosion sfx
+
+            IntroArray[0].SetActive(false);
+            IntroArray[1].SetActive(true);
+            IntroArray[2].SetActive(true);
+
+            yield return new WaitForSeconds(6f); //Delay for starting animations
+        }
+        else //Otherwise, a short delay then jump straight into gameplay
+        {
+            yield return new WaitForSeconds(1f);
+        }
 
         gameState = GameState.InProgress; //After intro, switch to InProgress state
 
         MusicSource.clip = MusicClipsArray[1]; //Replace the clip in the Music Audio Source
         MusicSource.Play(); //Play Battle music
 
-        //Bring up in-game HUD
+        MainMenu.SetActive(false);
+        HUD.SetActive(true);
 
         //Start necessary methods and coroutines
         gameFlow.GameHasStarted();
@@ -183,6 +186,7 @@ public class Director : MonoBehaviour
         {
             gameState = GameState.Endgame; //Switch to Endgame state
             MusicSource.Stop(); //Stop playing Battle music
+            SoundEffect(11, 1f, false); //Explosion sfx
         }
         else //Otherwise
         {
