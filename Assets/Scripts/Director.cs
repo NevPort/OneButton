@@ -76,9 +76,16 @@ public class Director : MonoBehaviour
         }
     }
 
-    public void SoundEffect(int audioClipIndex)
+    public void SoundEffect(int audioClipIndex, float volume, bool oneShot)
     {
-
+        if (oneShot == false)
+        {
+            SfxSource.clip = SfxClipsArray[audioClipIndex];
+            SfxSource.volume = volume;
+            SfxSource.Play();
+        }
+        else
+            SfxSource.PlayOneShot(SfxClipsArray[audioClipIndex], volume);
     }
 
     void MenuNavigation()
@@ -170,6 +177,7 @@ public class Director : MonoBehaviour
     public void PlayerTookDamage() //When the player takes damage
     {
         playerLives--; //Remove 1 life
+        SoundEffect(10, 1f, true); //Taking Damage sfx
 
         if (playerLives <= 0) //If the player has lost all their lives
         {

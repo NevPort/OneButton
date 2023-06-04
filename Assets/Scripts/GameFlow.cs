@@ -58,6 +58,8 @@ public class GameFlow : MonoBehaviour
     public IEnumerator SearchingForElements() //Step 1 of game flow
     {
         ProtagAnimator.SetBool("Searching", true); //Activates the Searching animation
+
+        Director.Instance.SoundEffect(1, 0.5f, false); //Rummaging sfx
         
         elementDiscovered = "Searching...";
         discoveredAnElement = false;
@@ -77,6 +79,9 @@ public class GameFlow : MonoBehaviour
 
         discoveredAnElement = true;
 
+        int s = Random.Range(2, 4 + 1); //Choose a random Discover sfx
+        Director.Instance.SoundEffect(s, 0.5f, false); //Rummaging sfx
+
         yield return new WaitForSeconds(cycleRate); //Discovery Phase
 
         elementDiscovered = "";
@@ -93,6 +98,8 @@ public class GameFlow : MonoBehaviour
         {
             if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.SingleClick) //If the player clicked once
             {
+                Director.Instance.SoundEffect(0, 1f, false); //Button Click sfx
+                
                 if (lefthand == "") //If the left hand is empty
                 {
                     lefthand = elementDiscovered; //Element goes on left hand
@@ -175,28 +182,58 @@ public class GameFlow : MonoBehaviour
         if (rightHandIsUsed == false)
         {
             if (lefthand == "Water" && firstMonster.elementType.ToString() == "Fire")
+            {
+                Director.Instance.SoundEffect(6, 0.5f, true); //Water Attack sfx
                 return true;
+            }
             else if (lefthand == "Fire" && firstMonster.elementType.ToString() == "Earth")
+            {
+                Director.Instance.SoundEffect(7, 0.5f, true); //Fire Attack sfx
                 return true;
+            }
             else if (lefthand == "Earth" && firstMonster.elementType.ToString() == "Wind")
+            {
+                Director.Instance.SoundEffect(8, 0.5f, true); //Earth Attack sfx
                 return true;
+            }
             else if (lefthand == "Wind" && firstMonster.elementType.ToString() == "Water")
+            {
+                Director.Instance.SoundEffect(9, 0.5f, true); //Wind Attack sfx
                 return true;
+            }
             else
+            {
+                Director.Instance.SoundEffect(5, 0.5f, true); //Failed Attack sfx
                 return false;
+            }
         }
         else
         {
             if (righthand == "Water" && firstMonster.elementType.ToString() == "Fire")
+            {
+                Director.Instance.SoundEffect(6, 0.5f, true); //Water Attack sfx
                 return true;
+            }
             else if (righthand == "Fire" && firstMonster.elementType.ToString() == "Earth")
+            {
+                Director.Instance.SoundEffect(7, 0.5f, true); //Fire Attack sfx
                 return true;
+            }
             else if (righthand == "Earth" && firstMonster.elementType.ToString() == "Wind")
+            {
+                Director.Instance.SoundEffect(8, 0.5f, true); //Earth Attack sfx
                 return true;
+            }
             else if (righthand == "Wind" && firstMonster.elementType.ToString() == "Water")
+            {
+                Director.Instance.SoundEffect(9, 0.5f, true); //Wind Attack sfx
                 return true;
+            }
             else
-                return false;
+            {
+                Director.Instance.SoundEffect(5, 0.5f, true); //Failed Attack sfx
+                return true;
+            }
         }
     }
 }
