@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     TMP_Text rightHandText;
     TMP_Text livesText;
     TMP_Text timeSurvivedText;
+    TMP_Text endTimeText;
 
     Image discoveredImage;
     Image leftHandImage;
@@ -29,6 +30,7 @@ public class UIManager : MonoBehaviour
         rightHandText = GameObject.Find("Right Hand Text").GetComponent<TMP_Text>();
         livesText = GameObject.Find("Lives Text").GetComponent<TMP_Text>();
         timeSurvivedText = GameObject.Find("Time Survived").GetComponent<TMP_Text>();
+        endTimeText = GameObject.Find("End Survival Time").GetComponent<TMP_Text>();
 
         discoveredImage = GameObject.Find("Discovered Image").GetComponent<Image>();
         leftHandImage = GameObject.Find("Left Hand").GetComponent<Image>();
@@ -48,6 +50,10 @@ public class UIManager : MonoBehaviour
         {
             UpdateTexts();
             UpdateImages();
+        }
+        else if (Director.Instance.gameState == Director.GameState.Endgame)
+        {
+            endTimeText.text = "You survived for:\n" + Director.Instance.timeSurvived;
         }
     }
 

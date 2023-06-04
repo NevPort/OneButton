@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,7 +6,7 @@ public class Director : MonoBehaviour
 {
     public static Director Instance { get; private set; }
 
-    public enum GameState { MainMenu, Tutorial, Pregame, InProgress, Endgame}
+    public enum GameState { MainMenu, Tutorial, Pregame, InProgress, Endgame }
     public GameState gameState;
 
     public GameObject[] IntroArray;
@@ -24,8 +23,6 @@ public class Director : MonoBehaviour
     public string timeSurvived;
     float secondsTimer;
     int minutesTimer;
-
-    bool restarting;
 
     GameObject MainMenu;
     GameObject HUD;
@@ -65,7 +62,7 @@ public class Director : MonoBehaviour
         IntroArray[0].SetActive(true);
         IntroArray[1].SetActive(false);
         IntroArray[2].SetActive(false);
-        
+
         gameState = GameState.MainMenu; //Start GameState on MainMenu state
     }
 
@@ -108,7 +105,7 @@ public class Director : MonoBehaviour
         if (gameState == GameState.MainMenu) //If the game is in the main menu
         {
             MainMenu.SetActive(true); //Bring up Main Menu
-            
+
             if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.SingleClick) //If the player single clicks
             {
                 StartCoroutine(StartGame()); //Start the game
@@ -123,21 +120,9 @@ public class Director : MonoBehaviour
 
             if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.SingleClick)
             {
-                GameOver.SetActive(false);
-
+                SoundEffect(0, 1, false);
                 SoundEffect(0, 1, false);
 
-                //Replenish lives and timer
-                playerLives = 3;
-                secondsTimer = 0f;
-                minutesTimer = 0;
-
-                restarting = true;
-                
-                StartCoroutine(StartGame()); //Start game once again
-            }
-            else if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.DoubleClick)
-            {
                 SceneManager.LoadScene("MainScene", LoadSceneMode.Single); //Reload game (since restarting to main menu)
             }
         }
@@ -145,23 +130,16 @@ public class Director : MonoBehaviour
 
     public IEnumerator StartGame() //For when the game starts from main menu
     {
-        if (restarting == false) //If not restarting, play intro sequence
-        {
-            gameState = GameState.Pregame; //Switch to Pregame state
+        gameState = GameState.Pregame; //Switch to Pregame state
 
-            MusicSource.Stop(); //Stop music
-            SoundEffect(11, 0.5f, false); //Explosion sfx
+        MusicSource.Stop(); //Stop music
+        SoundEffect(11, 0.5f, false); //Explosion sfx
 
-            IntroArray[0].SetActive(false);
-            IntroArray[1].SetActive(true);
-            IntroArray[2].SetActive(true);
+        IntroArray[0].SetActive(false);
+        IntroArray[1].SetActive(true);
+        IntroArray[2].SetActive(true);
 
-            yield return new WaitForSeconds(6f); //Delay for starting animations
-        }
-        else //Otherwise, a short delay then jump straight into gameplay
-        {
-            yield return new WaitForSeconds(1f);
-        }
+        yield return new WaitForSeconds(6f); //Delay for starting animations
 
         gameState = GameState.InProgress; //After intro, switch to InProgress state
 
@@ -186,7 +164,7 @@ public class Director : MonoBehaviour
         {
             gameState = GameState.Endgame; //Switch to Endgame state
             MusicSource.Stop(); //Stop playing Battle music
-            SoundEffect(11, 1f, false); //Explosion sfx
+            SoundEffect(11, 0.5f, false); //Explosion sfx
         }
         else //Otherwise
         {

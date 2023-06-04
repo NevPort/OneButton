@@ -114,7 +114,8 @@ public class Spawner : MonoBehaviour
         {
             for (int x = 0; x < monstersInGame.Count; x++)
             {
-                Destroy(monstersInGame[x]);
+                monstersInGame[x].GetComponent<ParticleSystem>().Play();
+                Destroy(monstersInGame[x], 0.4f);
 
                 if (x >= monstersInGame.Count - 1)
                 {
@@ -124,7 +125,8 @@ public class Spawner : MonoBehaviour
         }
         else
         {
-            Destroy(monstersInGame[0]);
+            monstersInGame[0].GetComponent<ParticleSystem>().Play();
+            Destroy(monstersInGame[0], 0.4f);
             monstersInGame.RemoveAt(0);
         }
     }
