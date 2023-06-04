@@ -12,6 +12,13 @@ public class Director : MonoBehaviour
 
     public GameObject[] TutorialArray;
 
+    public AudioClip[] MusicClipsArray;
+
+    public AudioClip[] SfxClipsArray;
+
+    public AudioSource MusicSource;
+    public AudioSource SfxSource;
+
     public int playerLives;
 
     int tutorialPhase;
@@ -33,6 +40,9 @@ public class Director : MonoBehaviour
         {
             Instance = this;
         }
+
+        //MusicSource.clip = MusicClipsArray[0]; //Replace the clip in the Music Audio Source
+        //MusicSource.Play();
     }
 
     // Start is called before the first frame update
@@ -66,10 +76,15 @@ public class Director : MonoBehaviour
         }
     }
 
+    public void SoundEffect(int audioClipIndex)
+    {
+
+    }
+
     void MenuNavigation()
     {
         if (gameState == GameState.MainMenu) //If the game is in the main menu
-        {
+        {          
             if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.SingleClick) //If the player single clicks
             {
                 StartCoroutine(StartGame()); //Start the game
@@ -141,6 +156,9 @@ public class Director : MonoBehaviour
 
         gameState = GameState.InProgress; //After intro, switch to InProgress state
 
+        //MusicSource.clip = MusicClipsArray[1]; //Replace the clip in the Music Audio Source
+        //MusicSource.Play(); //Play Battle music
+
         //Bring up in-game HUD
 
         //Start necessary methods and coroutines
@@ -156,6 +174,7 @@ public class Director : MonoBehaviour
         if (playerLives <= 0) //If the player has lost all their lives
         {
             gameState = GameState.Endgame; //Switch to Endgame state
+            MusicSource.Stop(); //Stop playing Battle music
         }
         else //Otherwise
         {
