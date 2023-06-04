@@ -752,10 +752,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterPrefabs:
-  - {fileID: 3576168195706059348, guid: 76215824bcfa076448e6824cc803b249, type: 3}
-  - {fileID: 3576168195706059348, guid: 12ee58b58443829409a91bac288542dc, type: 3}
-  - {fileID: 3576168195706059348, guid: 0728d1b25300dd240b51de23b9c13538, type: 3}
-  - {fileID: 3576168195706059348, guid: 4a981bbe4b56d27468dcd1faad18bb58, type: 3}
+  - {fileID: 7449916301606545338, guid: 7d63d2f49f85d8d41b1d3ffda9d17262, type: 3}
+  - {fileID: 7050178659870606342, guid: b97aa7e8418dc0e4ab257149ffb8b97a, type: 3}
+  - {fileID: 6944611829053981498, guid: 038cc00f545f06144b4e8494d3217297, type: 3}
+  - {fileID: 4859380543190755525, guid: 46080abe21ae5fd44ae52b229b02fad1, type: 3}
   monstersToSpawn: []
   monstersInGame: []
 --- !u!1 &545472772
@@ -1264,6 +1264,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &772534947 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2672695258998694949, guid: 9d3f3d93aeef2304589ead0cb859e5fb, type: 3}
+  m_PrefabInstance: {fileID: 3014662957999651301}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &772534951
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 772534947}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1.5
+  m_Height: 6
+  m_Direction: 1
+  m_Center: {x: 0.06819576, y: -0.66239154, z: -0.015900373}
 --- !u!1 &928411498
 GameObject:
   m_ObjectHideFlags: 0
