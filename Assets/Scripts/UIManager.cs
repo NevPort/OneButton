@@ -36,12 +36,12 @@ public class UIManager : MonoBehaviour
         livesText.text = "Lives: " + Director.Instance.playerLives.ToString();
         timeSurvivedText.text = "Survived for: " + Director.Instance.timeSurvived;
 
-        if (FindFirstObjectByType<GameFlow>().elementDiscovered != "Searching...") //If the GameFlow isn't searching for an element
-            discoveringText.text = "Found: " + FindFirstObjectByType<GameFlow>().elementDiscovered + "\n*Click Once*";
+        if (FindFirstObjectByType<GameFlow>().elementDiscovered == "")
+            discoveringText.text = "";
         else if (FindFirstObjectByType<GameFlow>().elementDiscovered == "Searching...")
             discoveringText.text = FindFirstObjectByType<GameFlow>().elementDiscovered;
-        else if (FindFirstObjectByType<GameFlow>().elementDiscovered == "")
-            discoveringText.text = FindFirstObjectByType<GameFlow>().elementDiscovered;
+        else if (FindFirstObjectByType<GameFlow>().elementDiscovered != "Searching...") //If the GameFlow isn't searching for an element
+            discoveringText.text = "Found: " + FindFirstObjectByType<GameFlow>().elementDiscovered + "\n*Click Once*";
 
         if (FindFirstObjectByType<GameFlow>().lefthand != "") //If the left hand isn't empty
             leftHandText.text = FindFirstObjectByType<GameFlow>().lefthand + "\n*Double-Click*";

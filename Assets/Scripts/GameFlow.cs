@@ -73,6 +73,9 @@ public class GameFlow : MonoBehaviour
 
         yield return new WaitForSeconds(cycleRate); //Discovery Phase
 
+        elementDiscovered = "";
+        discoveredAnElement = false;
+
         yield return new WaitWhile(() => stopSearch); //Coroutine pauses until stopSearch is no longer true
 
         StartCoroutine(SearchingForElements()); //Loop this coroutine
