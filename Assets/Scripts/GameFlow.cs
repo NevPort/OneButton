@@ -16,9 +16,13 @@ public class GameFlow : MonoBehaviour
     public string righthand;
     bool rightHandIsUsed;
 
+    Animator ProtagAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
+        ProtagAnimator = GameObject.Find("Protag_Anim").GetComponent<Animator>();
+
         cycleRate = 1.1f; 
     }
 
@@ -53,6 +57,8 @@ public class GameFlow : MonoBehaviour
 
     public IEnumerator SearchingForElements() //Step 1 of game flow
     {
+        ProtagAnimator.SetBool("Searching", true); //Activates the Searching animation
+        
         elementDiscovered = "Searching...";
         discoveredAnElement = false;
 
@@ -105,6 +111,8 @@ public class GameFlow : MonoBehaviour
 
         if (lefthand != "" && righthand != "") //If both hands are full
         {
+            ProtagAnimator.SetBool("Searching", false); //Goes back to Idle animation
+
             //Stop search
             stopSearch = true;
             discoveredAnElement = false;
@@ -123,6 +131,8 @@ public class GameFlow : MonoBehaviour
         {
             if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.DoubleClick) //If the player clicks twice
             {
+                ProtagAnimator.SetTrigger("Attack"); //Activate the Attack animation
+                
                 rightHandIsUsed = false; //The left hand is being used
                 CheckElementMatching();
 
@@ -140,6 +150,8 @@ public class GameFlow : MonoBehaviour
         {
             if (PlayerInput.Instance.buttonInput == PlayerInput.ButtonInput.TripleClick) //If the player clicks trice
             {
+                ProtagAnimator.SetTrigger("Attack"); //Activate the Attack animation
+
                 rightHandIsUsed = true; //The right hand is being used
                 CheckElementMatching();
 

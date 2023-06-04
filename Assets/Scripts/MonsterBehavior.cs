@@ -12,12 +12,12 @@ public class MonsterBehavior : MonoBehaviour
     Rigidbody rb;
     Transform tf;
 
-    Vector3 target;
+    Transform target;
     
     // Start is called before the first frame update
     void Awake()
     {
-        target = GameObject.FindGameObjectWithTag("Player").transform.position;
+        target = GameObject.FindGameObjectWithTag("Player").transform;
         rb = this.gameObject.GetComponent<Rigidbody>();
         tf = this.gameObject.GetComponent<Transform>();
     }
@@ -27,7 +27,7 @@ public class MonsterBehavior : MonoBehaviour
     {
         if (Director.Instance.gameState == Director.GameState.InProgress) //If the game is currently in progress, this monster will move towards the player, otherwise, it stands still (likely for endgame)
         {
-            tf.position = Vector3.MoveTowards(tf.position, target, speed * Time.deltaTime);
+            tf.position = Vector3.MoveTowards(tf.position, target.position, speed * Time.deltaTime);
         }
         else
         {

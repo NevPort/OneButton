@@ -89,7 +89,7 @@ public class Spawner : MonoBehaviour
     {
         int r = Random.Range(0, monstersToSpawn.Count); //Choose a random monster
         
-        GameObject monsterClone = Instantiate(monstersToSpawn[r], this.gameObject.transform.position, Quaternion.identity); //Instantiate a clone of the monster where this spawner is
+        GameObject monsterClone = Instantiate(monstersToSpawn[r], this.gameObject.transform.position, monstersToSpawn[r].transform.rotation); //Instantiate a clone of the monster where this spawner is
         monstersInGame.Add(monsterClone); //Add the monster to the monstersInGame list
         monsterClone.GetComponent<MonsterBehavior>().speed = monsterSpeed; //Give the monster the speed needed
 
