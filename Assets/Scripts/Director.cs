@@ -42,6 +42,9 @@ public class Director : MonoBehaviour
             Instance = this;
         }
 
+        Debug.Log(Screen.width);
+        Debug.Log(Screen.height);
+
         MusicSource.clip = MusicClipsArray[0]; //Replace the clip in the Music Audio Source
         MusicSource.Play();
     }
